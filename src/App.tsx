@@ -5,6 +5,7 @@ import { PublicRoute } from "./components/PublicRoute";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { WalletsPage } from "./pages/WalletsPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         {/* Rotas protegidas: redireciona para /login se não autenticado */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/wallets" element={<WalletsPage />} />
         </Route>
 
         {/* Redireciona / e qualquer rota desconhecida para /dashboard;
