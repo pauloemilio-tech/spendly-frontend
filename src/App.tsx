@@ -6,6 +6,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { WalletsPage } from "./pages/WalletsPage";
+import { TransactionsPage } from "./pages/TransactionsPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/wallets" element={<WalletsPage />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
         </Route>
 
         {/* Redireciona / e qualquer rota desconhecida para /dashboard;
