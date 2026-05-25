@@ -1,8 +1,9 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import type { CreateWalletDTO, Wallet, WalletType, WalletStatus } from "../types/wallet";
-import { WalletType as WalletTypeObj, WalletStatus as WalletStatusObj } from "../types/wallet";
+import { WalletType as WalletTypeObj, WalletStatus as WalletStatusObj, WalletTypeLabels, WalletStatusLabels } from "../types/wallet";
 import { walletService } from "../services/walletService";
+import { getFriendlyApiErrorMessage } from "../utils/apiError";
 
 type Props = {
   onCreated: (wallet: Wallet) => void;
@@ -21,10 +22,16 @@ export function WalletForm({ onCreated }: Props) {
     setError(null);
     setLoading(true);
 
+    const parsedBalance = Number(balance);
+    const initialBalance =
+      balance.trim() === "" || Number.isNaN(parsedBalance)
+        ? undefined
+        : parsedBalance;
+
     const payload: CreateWalletDTO = {
       name: name.trim(),
-      balance: parseFloat(balance || "0"),
       walletType: type,
+      initialBalance,
       walletStatus: status,
     };
 
@@ -36,7 +43,7 @@ export function WalletForm({ onCreated }: Props) {
       setType(WalletTypeObj.CASH);
       setStatus(WalletStatusObj.ACTIVE);
     } catch (err) {
-      setError((err as Error).message || "Erro ao criar wallet");
+      setError(getFriendlyApiErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -73,9 +80,9 @@ export function WalletForm({ onCreated }: Props) {
             onChange={(e) => setType(e.target.value as WalletType)}
             className="mt-1 w-full border rounded px-3 py-2"
           >
-            {Object.values(WalletTypeObj).map((t) => (
-              <option key={t} value={t}>
-                {t}
+            {Object.entries(WalletTypeObj).map(([, value]) => (
+              <option key={value} value={value}>
+                {WalletTypeLabels[value as WalletType]}
               </option>
             ))}
           </select>
@@ -90,7 +97,7 @@ export function WalletForm({ onCreated }: Props) {
           >
             {Object.values(WalletStatusObj).map((s) => (
               <option key={s} value={s}>
-                {s}
+                {WalletStatusLabels[s as WalletStatus]}
               </option>
             ))}
           </select>

@@ -10,7 +10,7 @@ export function DashboardPage() {
       <p className="mb-4">Bem-vindo, {user?.name}!</p>
 
       <div className="flex items-center gap-3 mb-6">
-        <Link to="/wallets" className="px-3 py-2 bg-blue-600 text-white rounded">Wallets</Link>
+        <Link to="/wallets" className="px-3 py-2 bg-blue-600 text-white rounded">Carteiras</Link>
         <Link to="/transactions" className="px-3 py-2 bg-green-600 text-white rounded">Transações</Link>
       </div>
 

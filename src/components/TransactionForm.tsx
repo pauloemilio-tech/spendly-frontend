@@ -1,19 +1,31 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import type { CreateTransactionDTO, TransactionCategory, TransactionType } from "../types/transaction";
-import { TRANSACTION_CATEGORIES, TRANSACTION_TYPES } from "../types/transaction";
+import type {
+  CreateTransactionDTO,
+  Transaction,
+  TransactionCategory,
+  TransactionType,
+} from "../types/transaction";
+import {
+  TRANSACTION_TYPES,
+  INCOME_CATEGORIES,
+  EXPENSE_CATEGORIES,
+  TransactionTypeLabels,
+  TransactionCategoryLabels,
+} from "../types/transaction";
 import type { Wallet } from "../types/wallet";
 import { walletService } from "../services/walletService";
 import { transactionService } from "../services/transactionService";
+import { getFriendlyApiErrorMessage } from "../utils/apiError";
 
 type Props = {
-  onCreated: (t: any) => void;
+  onCreated: (t: Transaction) => void;
 };
 
 export function TransactionForm({ onCreated }: Props) {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [walletId, setWalletId] = useState<number | "">("");
-  const [type, setType] = useState<TransactionType>(TRANSACTION_TYPES[1]);
+  const [type, setType] = useState<TransactionType>(TRANSACTION_TYPES[0]);
   const [category, setCategory] = useState<TransactionCategory | "">("");
   const [amount, setAmount] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -37,7 +49,7 @@ export function TransactionForm({ onCreated }: Props) {
     setError(null);
 
     if (!walletId) {
-      setError("Selecione uma wallet");
+      setError("Selecione uma carteira");
       return;
     }
 
@@ -69,16 +81,18 @@ export function TransactionForm({ onCreated }: Props) {
       setAmount("");
       setDescription("");
     } catch (err) {
-      setError((err as Error).message || "Erro ao criar transação");
+      setError(getFriendlyApiErrorMessage(err));
     } finally {
       setLoading(false);
     }
   }
 
+  const categories = type === "INCOME" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-3 p-4 bg-white rounded shadow-sm">
       <div>
-        <label className="block text-sm font-medium text-gray-700">Wallet</label>
+        <label className="block text-sm font-medium text-gray-700">Carteira</label>
         <select
           className="mt-1 w-full border rounded px-3 py-2"
           value={walletId}
@@ -96,10 +110,13 @@ export function TransactionForm({ onCreated }: Props) {
           <select
             className="mt-1 w-full border rounded px-3 py-2"
             value={type}
-            onChange={(e) => setType(e.target.value as TransactionType)}
+            onChange={(e) => {
+              setType(e.target.value as TransactionType);
+              setCategory("");
+            }}
           >
             {TRANSACTION_TYPES.map((t) => (
-              <option key={t} value={t}>{t}</option>
+              <option key={t} value={t}>{TransactionTypeLabels[t]}</option>
             ))}
           </select>
         </div>
@@ -113,8 +130,8 @@ export function TransactionForm({ onCreated }: Props) {
             required
           >
             <option value="">Selecione</option>
-            {TRANSACTION_CATEGORIES.map((c) => (
-              <option key={c} value={c}>{c}</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>{TransactionCategoryLabels[c]}</option>
             ))}
           </select>
         </div>
@@ -149,7 +166,7 @@ export function TransactionForm({ onCreated }: Props) {
           className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
           disabled={loading}
         >
-          {loading ? "Criando..." : "Criar"}
+          {loading ? "Criando..." : "Criar transação"}
         </button>
       </div>
     </form>

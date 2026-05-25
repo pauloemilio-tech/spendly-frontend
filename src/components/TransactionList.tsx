@@ -1,4 +1,5 @@
 import type { Transaction } from "../types/transaction";
+import { TransactionTypeLabels, TransactionCategoryLabels } from "../types/transaction";
 
 type Props = {
   transactions: Transaction[];
@@ -17,7 +18,9 @@ export function TransactionList({ transactions, loading, error }: Props) {
         <li key={t.id} className="p-4 bg-white rounded shadow-sm flex items-center justify-between">
           <div>
             <div className="font-medium">{t.description ?? "(sem descrição)"}</div>
-            <div className="text-sm text-gray-500">{t.walletName} • {t.category} • {new Date(t.createdAt).toLocaleString()}</div>
+            <div className="text-sm text-gray-500">
+              {t.walletName} • {TransactionTypeLabels[t.type]} • {TransactionCategoryLabels[t.category]} • {new Date(t.createdAt).toLocaleString()}
+            </div>
           </div>
           <div className={`font-semibold ${t.type === "INCOME" ? "text-green-600" : "text-red-600"}`}>
             R$ {t.amount.toFixed(2)}

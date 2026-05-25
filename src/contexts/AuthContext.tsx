@@ -53,6 +53,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loadAuthenticatedUser();
   }, [loadAuthenticatedUser]);
 
+  const logout = useCallback(() => {
+    localStorage.removeItem(TOKEN_KEY);
+    setToken(null);
+    setUser(null);
+  }, []);
+
+  useEffect(() => {
+    const handleLogoutEvent = () => {
+      logout();
+    };
+
+    window.addEventListener("app-logout", handleLogoutEvent);
+    return () => {
+      window.removeEventListener("app-logout", handleLogoutEvent);
+    };
+  }, [logout]);
+
   const login = useCallback(async (cpf: string, password: string) => {
     const data = await loginService({ cpf, password });
     localStorage.setItem(TOKEN_KEY, data.token);
@@ -71,12 +88,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     []
   );
-
-  const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
-    setToken(null);
-    setUser(null);
-  }, []);
 
   // useMemo evita recriar o objeto de contexto a cada render quando os
   // valores não mudaram, prevenindo re-renders desnecessários nos consumidores.

@@ -13,6 +13,10 @@ export const walletService = {
     const res = await apiClient.post<Wallet>(BASE, payload);
     return res.data;
   },
+
+  async deleteWallet(id: number): Promise<void> {
+    await apiClient.delete(`${BASE}/${id}`);
+  },
 };
 
 export default walletService;
