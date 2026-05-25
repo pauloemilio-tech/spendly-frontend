@@ -1,140 +1,216 @@
 # Spendly 💰 — Frontend
 
-Spendly is a personal finance management platform under active development, built with a focus on scalability, clean architecture and real-world application structure.
+Spendly is a modern personal finance management platform frontend built with a strong focus on scalability, clean architecture, user experience and real-world frontend engineering practices.
 
-The frontend was designed to simulate the experience of a modern financial platform, emphasizing authentication flows, protected routes, API integration and maintainable frontend architecture.
+The application simulates the frontend layer of a real financial product, including authentication flows, protected routes, wallet management, financial transactions and integration with a secure Spring Boot backend API.
 
-🚧 Project Status: Active Development
-
----
-
-## 🎯 Project Goal
-
-The goal of Spendly is to build a realistic full stack financial application focused on:
-
-* Modern frontend architecture
-* Secure authentication flows
-* Backend integration with JWT
-* Scalable React application structure
-* Real-world user experience
-* Clean and maintainable code practices
+🚧 **Project Status:** Active Development
 
 ---
 
-## 🚀 Tech Stack
+# 🎯 Project Goal
 
-* React 19
-* TypeScript
-* Vite
-* Tailwind CSS v4
-* React Router DOM v7
-* Axios
-* Context API
+Spendly aims to simulate the frontend architecture of a real financial platform, emphasizing:
 
----
-
-## 🧠 Domain Direction
-
-Spendly was originally created as a digital banking simulation project and later evolved into a personal finance management platform.
-
-This transition allowed the project to:
-
-* Represent a more realistic product scenario
-* Improve portfolio relevance
-* Focus on financial organization workflows
-* Enable future features such as dashboards, expense tracking and financial insights
-* Maintain strong technical architecture while improving product direction
+- Modern frontend architecture
+- Secure authentication flows
+- JWT-based session handling
+- Real-world financial workflows
+- Responsive and maintainable UI
+- Scalable React application structure
+- Strong TypeScript typing
+- Clean separation of concerns
 
 ---
 
-## 🧱 Current Stage
+# 🚀 Tech Stack
+
+## Frontend Core
+
+- React 19
+- TypeScript
+- Vite
+- React Router DOM v7
+
+## Styling & UI
+
+- Tailwind CSS v4
+
+## API & State Management
+
+- Axios
+- Context API
+- React Hooks
+
+---
+
+# 🧱 Current Stage
 
 The frontend currently includes:
 
-* Complete authentication flow
-* Protected and public route system
-* Authentication persistence
-* Backend integration with JWT
-* Context-based authentication architecture
-* User session handling
-* Dashboard structure
-* Wallet management module
-* API communication layer with Axios
-* Form validation and error handling
-* Loading, error and empty UI states
+- Complete authentication flow
+- Public and protected route system
+- JWT session persistence
+- Automatic logout on invalid session
+- Wallet management module
+- Financial transactions module
+- Real-time wallet balance updates
+- Dynamic transaction categories
+- Backend integration with Axios
+- Friendly error handling
+- Responsive UI structure
+- Loading, error and empty states
 
-The application continues evolving toward a complete personal finance platform integrated with the Spendly backend.
+The application continues evolving toward a complete financial management platform integrated with the Spendly backend.
+
+---
+
+# 🧠 Domain Direction
+
+Spendly evolved from a digital banking simulation into a more realistic personal finance management platform.
+
+This transition allowed the project to:
+
+- Represent realistic financial workflows
+- Improve portfolio relevance
+- Focus on financial organization
+- Simulate real product behavior
+- Prepare the platform for dashboards and analytics
+- Maintain strong technical architecture while improving business direction
 
 ---
 
 # ✅ Progress
 
-## Phase 1 — Authentication System (Completed)
+# Phase 1 — Authentication System (Completed)
 
-### Implemented features
+## Implemented features
 
-* Project structure setup
-* Login page
-* Register page
-* CPF and password validation
-* Axios API client
-* JWT authentication flow
-* Authentication persistence with localStorage
-* Axios interceptor for protected requests
-* Backend integration with Spring Boot API
-* Error handling and validation feedback
-* Auth context architecture
-* Route protection system
-* Dashboard initialization flow
+- Login page
+- Register page
+- CPF and password validation
+- JWT authentication flow
+- Authentication persistence with localStorage
+- Axios API client
+- Protected routes
+- Public routes
+- Automatic Authorization header handling
+- Session hydration on refresh
+- Automatic logout on invalid token
+- Friendly authentication error handling
 
----
+## Authentication concepts applied
 
-## Phase 2 — Wallet Management (Completed)
-
-### Implemented features
-
-* Wallet listing
-* Wallet creation flow
-* Wallet service layer
-* Wallet form component
-* Wallet list component
-* Protected wallet route
-* Real-time wallet list updates
-* Typed wallet models
-* API integration with backend wallet endpoints
-* Loading, error and empty states
-* Tailwind-based responsive UI structure
-
-### Frontend concepts applied
-
-* Component composition
-* Service layer abstraction
-* Typed API integration
-* Local state management
-* Controlled forms
-* Callback-based state synchronization
-* Separation of concerns
-* Reusable UI structure
+- Context API state management
+- Protected route architecture
+- Session persistence
+- Axios interceptors
+- Global authentication state
+- Token-based authentication flow
 
 ---
 
-## 🔐 Authentication Architecture
+# Phase 2 — Wallet Management (Completed)
+
+The wallet module represents the first complete financial workflow implemented in the frontend.
+
+## Features
+
+- Create wallet
+- Deactivate wallet
+- List authenticated user wallets
+- Initial balance support
+- Wallet type rendering
+- Real-time UI updates
+- Friendly validation feedback
+- Loading and empty states
+
+## Wallet Types
+
+- Conta bancária
+- Dinheiro físico
+- Cartão de crédito
+- Investimento
+- Carteira digital
+
+## Frontend concepts applied
+
+- Component composition
+- Service layer abstraction
+- Typed API integration
+- Controlled forms
+- Local state synchronization
+- Callback-based updates
+- Separation of concerns
+- Reusable UI structure
+
+---
+
+# Phase 3 — Financial Transactions (Completed)
+
+The transaction module handles financial operations linked to wallets.
+
+## Features
+
+- Create income transactions
+- Create expense transactions
+- Dynamic category filtering
+- Real-time balance updates
+- Friendly financial validation feedback
+- Transaction listing
+- Protected financial operations
+- Loading and error handling
+- Automatic session invalidation on 401
+
+## Transaction Types
+
+### Receita
+
+- Salário
+- Freelance
+- Retorno de investimento
+- Presente
+- Outra receita
+
+### Despesa
+
+- Alimentação
+- Transporte
+- Saúde
+- Educação
+- Lazer
+- Compras
+- Contas
+- Investimento
+- Outra despesa
+
+## Financial UX Rules
+
+- Categories dynamically change based on transaction type
+- Users cannot select invalid category/type combinations
+- Insufficient funds errors are displayed with friendly messages
+- Wallet balances update automatically after transactions
+- Invalid sessions automatically redirect users to login
+
+---
+
+# 🔐 Authentication Architecture
 
 The authentication system was structured using React Context API and protected routing.
 
-### Implemented components
+## Implemented Components
 
-| Component         | Responsibility                                           |
-| ----------------- | -------------------------------------------------------- |
-| AuthContext       | Global authentication state                              |
-| ProtectedRoute    | Blocks unauthenticated access                            |
-| PublicRoute       | Prevents authenticated users from accessing public pages |
-| Axios Interceptor | Automatically attaches JWT token                         |
-| DashboardPage     | Initial authenticated area                               |
+| Component | Responsibility |
+|---|---|
+| AuthContext | Global authentication state |
+| ProtectedRoute | Blocks unauthenticated access |
+| PublicRoute | Prevents authenticated users from accessing public pages |
+| Axios Interceptor | Automatically attaches JWT token |
+| DashboardPage | Initial authenticated area |
 
 ---
 
-## 🔐 Authentication Flow
+# 🔄 Authentication Flow
 
 1. User submits CPF and password
 2. Frontend sends request to backend
@@ -144,35 +220,11 @@ The authentication system was structured using React Context API and protected r
 6. AuthContext hydrates authentication state
 7. Protected routes become accessible
 8. Axios automatically attaches Authorization header
+9. Invalid sessions automatically logout the user
 
 ---
 
-## 💼 Wallet Management Module
-
-The wallet module represents the first real financial workflow implemented in the frontend.
-
-### Features
-
-* Create wallet
-* List authenticated user wallets
-* Protected wallet access
-* Real-time UI updates after wallet creation
-* Loading feedback
-* Error feedback
-* Empty state handling
-
-### Wallet UI Structure
-
-| Component     | Responsibility                          |
-| ------------- | --------------------------------------- |
-| WalletsPage   | Orchestrates wallet state and API calls |
-| WalletForm    | Handles wallet creation                 |
-| WalletList    | Displays wallets and UI states          |
-| walletService | Centralizes wallet API communication    |
-
----
-
-## 🌐 API Integration
+# 🌐 API Integration
 
 The frontend communicates directly with the Spendly backend API.
 
@@ -182,11 +234,13 @@ The frontend communicates directly with the Spendly backend API.
 
 ## Login
 
+```http
 POST /auth/login
+```
 
 ### Request
 
-```json id="y3tnlb"
+```json
 {
   "cpf": "12345678901",
   "password": "123456"
@@ -195,7 +249,7 @@ POST /auth/login
 
 ### Response
 
-```json id="4aq1ww"
+```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9...",
   "type": "Bearer"
@@ -206,11 +260,13 @@ POST /auth/login
 
 ## Register Customer
 
+```http
 POST /customers
+```
 
 ### Request
 
-```json id="ulh8vq"
+```json
 {
   "name": "Paulo Emilio",
   "cpf": "12345678901",
@@ -223,92 +279,129 @@ POST /customers
 
 ## Current Authenticated User
 
+```http
 GET /customers/me
+```
 
 ### Headers
 
-```http id="h6n96w"
+```http
 Authorization: Bearer <JWT_TOKEN>
 ```
 
 ---
 
-# Wallets
+# 💼 Wallet Endpoints
 
 ## List Wallets
 
+```http
 GET /wallets
+```
 
 ---
 
 ## Create Wallet
 
+```http
 POST /wallets
+```
 
 ### Request
 
-```json id="39y5ha"
+```json
 {
-  "name": "Main Wallet",
-  "walletType": "BANK_ACCOUNT"
+  "name": "Santander",
+  "walletType": "BANK_ACCOUNT",
+  "initialBalance": 500
 }
 ```
 
 ---
 
-## 🧠 Frontend Concepts Applied
+# 💸 Transaction Endpoints
 
-* Context API state management
-* Protected route architecture
-* Separation of concerns
-* Typed API communication
-* Form validation
-* Authentication persistence
-* Reusable service layer
-* React hooks architecture
-* Scalable folder organization
-* Feature-based component organization
-* Loading and async state management
-* Callback-driven UI synchronization
+## Create Transaction
+
+```http
+POST /transactions
+```
+
+### Request
+
+```json
+{
+  "walletId": 1,
+  "type": "EXPENSE",
+  "category": "FOOD",
+  "amount": 100,
+  "description": "Market"
+}
+```
 
 ---
 
-## 📦 Running Locally
+## List Transactions
 
-### Clone repository
+```http
+GET /transactions
+```
 
-```bash id="wb4c3q"
+---
+
+# 🧠 Frontend Concepts Applied
+
+- Context API state management
+- Protected route architecture
+- Separation of concerns
+- Typed API communication
+- Form validation
+- Authentication persistence
+- Reusable service layer
+- React hooks architecture
+- Feature-based organization
+- Dynamic UI rendering
+- Loading and async state management
+- Callback-driven synchronization
+- Friendly error handling
+- Session invalidation handling
+
+---
+
+# 📦 Running Locally
+
+## Clone repository
+
+```bash
 git clone https://github.com/paulojrtoledo/spendly-frontend.git
 ```
 
-### Navigate to project folder
+## Navigate to project folder
 
-```bash id="12tvqv"
+```bash
 cd spendly-frontend
 ```
 
-### Install dependencies
+## Install dependencies
 
-```bash id="mjlwm8"
+```bash
 npm install
 ```
 
-### Run development server
+## Run development server
 
-```bash id="79d5fk"
+```bash
 npm run dev
 ```
 
 ---
 
-## 🔗 Related Repository
+# 🔗 Related Repositories
 
-Backend Repository:
-
-https://github.com/paulojrtoledo/spendly-backend
+- [Spendly Backend](https://github.com/paulojrtoledo/spendly-backend)
 
 ---
 
-## 👤 Author
+# 👤 Author
 
 Paulo Emilio de Toledo Jr.
