@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { useAuth } from "../contexts/AuthContext";
 import { dashboardService } from "../services/dashboardService";
 import type { DashboardSummary } from "../types/dashboard";
@@ -26,15 +27,17 @@ type SummaryCardProps = {
 };
 
 const cardTones: Record<SummaryCardProps["tone"], string> = {
-  neutral: "border-slate-200 bg-white text-slate-900",
-  positive: "border-emerald-100 bg-emerald-50 text-emerald-800",
-  negative: "border-rose-100 bg-rose-50 text-rose-800",
-  info: "border-blue-100 bg-blue-50 text-blue-800",
+  neutral: "",
+  positive: "summary-card-positive",
+  negative: "summary-card-negative",
+  info: "summary-card-info",
 };
 
 function SummaryCard({ label, value, tone }: SummaryCardProps) {
   return (
-    <article className={`rounded-2xl border p-5 shadow-sm ${cardTones[tone]}`}>
+    <article
+      className={`summary-card rounded-2xl border p-5 shadow-sm ${cardTones[tone]}`}
+    >
       <p className="text-sm font-medium opacity-75">{label}</p>
       <p className="mt-2 text-2xl font-bold tracking-tight">{value}</p>
     </article>
@@ -65,40 +68,43 @@ export function DashboardPage() {
   }, [loadSummary]);
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <main className="app-page min-h-screen">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
               Visão geral
             </p>
             <h1 className="mt-1 text-3xl font-bold tracking-tight">
               Olá, {user?.name}
             </h1>
-            <p className="mt-2 text-slate-600">
+            <p className="mt-2 text-[var(--color-muted)]">
               Acompanhe seu resumo financeiro em um só lugar.
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={logout}
-            className="self-start rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-100"
-          >
-            Sair
-          </button>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={logout}
+              className="app-button-secondary rounded-lg border px-4 py-2 text-sm font-medium"
+            >
+              Sair
+            </button>
+          </div>
         </header>
 
         <nav className="mt-8 flex flex-wrap gap-3" aria-label="Ações rápidas">
           <Link
             to="/wallets"
-            className="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+            className="app-button-primary rounded-lg px-4 py-2.5 text-sm font-semibold"
           >
             Nova carteira
           </Link>
           <Link
             to="/transactions"
-            className="rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+            className="app-button-accent rounded-lg px-4 py-2.5 text-sm font-semibold"
           >
             Nova transação
           </Link>
@@ -106,7 +112,7 @@ export function DashboardPage() {
 
         {loading && (
           <section
-            className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-600 shadow-sm"
+            className="app-card mt-8 rounded-2xl border p-8 text-center text-[var(--color-muted)]"
             aria-live="polite"
           >
             Carregando seu resumo financeiro...
@@ -115,17 +121,17 @@ export function DashboardPage() {
 
         {!loading && error && (
           <section
-            className="mt-8 rounded-2xl border border-rose-200 bg-rose-50 p-6"
+            className="app-error mt-8 rounded-2xl border p-6"
             role="alert"
           >
-            <h2 className="font-semibold text-rose-800">
+            <h2 className="font-semibold">
               Não foi possível carregar o dashboard
             </h2>
-            <p className="mt-1 text-sm text-rose-700">{error}</p>
+            <p className="mt-1 text-sm">{error}</p>
             <button
               type="button"
               onClick={() => void loadSummary()}
-              className="mt-4 rounded-lg bg-rose-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-rose-800"
+              className="app-button-accent mt-4 rounded-lg px-4 py-2 text-sm font-semibold"
             >
               Tentar novamente
             </button>
@@ -165,25 +171,25 @@ export function DashboardPage() {
               />
             </section>
 
-            <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-200 px-5 py-4 sm:px-6">
+            <section className="app-card mt-8 overflow-hidden rounded-2xl border">
+              <div className="border-b border-[var(--color-border)] px-5 py-4 sm:px-6">
                 <h2 className="text-lg font-semibold">Últimas transações</h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[var(--color-muted)]">
                   Seus lançamentos mais recentes.
                 </p>
               </div>
 
               {summary.recentTransactions.length === 0 ? (
                 <div className="px-5 py-12 text-center sm:px-6">
-                  <p className="font-medium text-slate-700">
+                  <p className="font-medium">
                     Nenhuma transação recente.
                   </p>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-[var(--color-muted)]">
                     Suas próximas movimentações aparecerão aqui.
                   </p>
                 </div>
               ) : (
-                <ul className="divide-y divide-slate-100">
+                <ul className="divide-y divide-[var(--color-border)]">
                   {summary.recentTransactions.map((transaction) => {
                     const isIncome = transaction.type === "INCOME";
                     const amountPrefix = isIncome ? "+" : "-";
@@ -194,14 +200,14 @@ export function DashboardPage() {
                         className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
                       >
                         <div className="min-w-0">
-                          <p className="truncate font-semibold text-slate-900">
+                          <p className="truncate font-semibold">
                             {transaction.description?.trim() || "Sem descrição"}
                           </p>
-                          <p className="mt-1 text-sm text-slate-500">
+                          <p className="mt-1 text-sm text-[var(--color-muted)]">
                             {TransactionCategoryLabels[transaction.category]} ·{" "}
                             {transaction.walletName}
                           </p>
-                          <p className="mt-1 text-xs text-slate-400">
+                          <p className="mt-1 text-xs text-[var(--color-muted)]">
                             {dateFormatter.format(new Date(transaction.createdAt))}
                           </p>
                         </div>
@@ -209,13 +215,15 @@ export function DashboardPage() {
                         <div className="sm:text-right">
                           <p
                             className={`font-bold ${
-                              isIncome ? "text-emerald-600" : "text-rose-600"
+                              isIncome
+                                ? "text-[var(--color-success)]"
+                                : "text-[var(--color-danger)]"
                             }`}
                           >
                             {amountPrefix}
                             {currencyFormatter.format(transaction.amount)}
                           </p>
-                          <p className="mt-1 text-xs font-medium uppercase tracking-wide text-slate-500">
+                          <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--color-muted)]">
                             {TransactionTypeLabels[transaction.type]}
                           </p>
                         </div>

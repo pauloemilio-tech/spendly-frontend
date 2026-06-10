@@ -3,6 +3,7 @@ import { walletService } from "../services/walletService";
 import type { Wallet } from "../types/wallet";
 import WalletList from "../components/WalletList";
 import WalletForm from "../components/WalletForm";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { getFriendlyApiErrorMessage } from "../utils/apiError";
 
 export function WalletsPage() {
@@ -53,19 +54,47 @@ export function WalletsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-4">Carteiras</h1>
+    <main className="app-page min-h-screen">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+        <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+              Organização financeira
+            </p>
+            <h1 className="mt-1 text-3xl font-bold tracking-tight">Carteiras</h1>
+            <p className="mt-2 text-[var(--color-muted)]">
+              Cadastre e acompanhe suas fontes de saldo.
+            </p>
+          </div>
+          <ThemeToggle />
+        </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-1">
-          <WalletForm onCreated={handleCreated} />
-        </div>
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-1">
+            <WalletForm onCreated={handleCreated} />
+          </div>
 
-        <div className="md:col-span-2">
-          <WalletList wallets={wallets} loading={loading} error={error} onDelete={handleDeleteWallet} deletingIds={deletingIds} />
+          <section className="lg:col-span-2">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">Suas carteiras</h2>
+              <p className="mt-1 text-sm text-[var(--color-muted)]">
+                {wallets.length}{" "}
+                {wallets.length === 1
+                  ? "carteira cadastrada"
+                  : "carteiras cadastradas"}
+              </p>
+            </div>
+            <WalletList
+              wallets={wallets}
+              loading={loading}
+              error={error}
+              onDelete={handleDeleteWallet}
+              deletingIds={deletingIds}
+            />
+          </section>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

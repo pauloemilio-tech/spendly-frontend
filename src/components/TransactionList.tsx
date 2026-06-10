@@ -8,22 +8,71 @@ type Props = {
 };
 
 export function TransactionList({ transactions, loading, error }: Props) {
-  if (loading) return <div className="p-4">Carregando transações...</div>;
-  if (error) return <div className="p-4 text-red-600">Erro: {error}</div>;
-  if (!transactions || transactions.length === 0) return <div className="p-4 text-gray-600">Nenhuma transação.</div>;
+  if (loading) {
+    return (
+      <div className="app-state rounded-2xl border p-8 text-center">
+        Carregando transações...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="app-error rounded-2xl border p-5" role="alert">
+        {error}
+      </div>
+    );
+  }
+
+  if (!transactions || transactions.length === 0) {
+    return (
+      <div className="app-state rounded-2xl border p-8 text-center">
+        <p className="font-medium text-[var(--color-text)]">
+          Nenhuma transação registrada.
+        </p>
+        <p className="mt-1 text-sm">
+          Suas próximas movimentações aparecerão aqui.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <ul className="space-y-2">
+    <ul className="space-y-4">
       {transactions.map((t) => (
-        <li key={t.id} className="p-4 bg-white rounded shadow-sm flex items-center justify-between">
-          <div>
-            <div className="font-medium">{t.description ?? "(sem descrição)"}</div>
-            <div className="text-sm text-gray-500">
-              {t.walletName} • {TransactionTypeLabels[t.type]} • {TransactionCategoryLabels[t.category]} • {new Date(t.createdAt).toLocaleString()}
+        <li
+          key={t.id}
+          className="app-card flex flex-col gap-4 rounded-2xl border p-5 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="min-w-0">
+            <div className="truncate font-semibold">
+              {t.description ?? "(sem descrição)"}
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <span className="app-badge rounded-full border px-2.5 py-1 text-xs font-medium">
+                {TransactionCategoryLabels[t.category]}
+              </span>
+              <span className="app-badge rounded-full border px-2.5 py-1 text-xs font-medium">
+                {t.walletName}
+              </span>
+            </div>
+            <div className="mt-2 text-xs text-[var(--color-muted)]">
+              {new Date(t.createdAt).toLocaleString("pt-BR")}
             </div>
           </div>
-          <div className={`font-semibold ${t.type === "INCOME" ? "text-green-600" : "text-red-600"}`}>
-            R$ {t.amount.toFixed(2)}
+          <div className="sm:text-right">
+            <div
+              className={`text-lg font-bold ${
+                t.type === "INCOME"
+                  ? "text-[var(--color-success)]"
+                  : "text-[var(--color-danger)]"
+              }`}
+            >
+              {t.type === "INCOME" ? "+" : "-"} R$ {t.amount.toFixed(2)}
+            </div>
+            <div className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--color-muted)]">
+              {TransactionTypeLabels[t.type]}
+            </div>
           </div>
         </li>
       ))}

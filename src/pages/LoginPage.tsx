@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -38,37 +39,95 @@ export function LoginPage() {
   }
 
   return (
-    <div>
-      <h1>Bem-vindo ao Spendly</h1>
+    <main className="app-page relative flex min-h-screen items-center justify-center px-4 py-20 sm:px-6">
+      <div className="absolute right-4 top-4 sm:right-6 sm:top-6">
+        <ThemeToggle />
+      </div>
 
-      <p>Faça login abaixo e acesse sua conta!</p>
+      <section className="app-card w-full max-w-md rounded-2xl border p-6 sm:p-8">
+        <header className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+            Spendly
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight">
+            Bem-vindo ao Spendly
+          </h1>
+          <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
+            Faça login para acessar sua conta.
+          </p>
+        </header>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="cpf">CPF</label>
-        <input
-          id="cpf"
-          type="text"
-          name="cpf"
-          value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
-        />
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          <div>
+            <label
+              htmlFor="cpf"
+              className="mb-2 block text-sm font-medium"
+            >
+              CPF
+            </label>
+            <input
+              id="cpf"
+              type="text"
+              name="cpf"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              className="app-input w-full rounded-lg border px-3.5 py-3 outline-none"
+            />
+          </div>
 
-        <label htmlFor="password">Senha</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium"
+            >
+              Senha
+            </label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="app-input w-full rounded-lg border px-3.5 py-3 outline-none"
+            />
+          </div>
 
-        <button type="submit">Entrar</button>
+          <div className="flex justify-end">
+            <Link
+              to="/forgot-password"
+              className="app-link text-sm font-medium hover:underline"
+            >
+              Esqueci minha senha
+            </Link>
+          </div>
 
-        {error && <p>{error}</p>}
-      </form>
+          {error && (
+            <p
+              className="app-error rounded-lg border px-4 py-3 text-sm"
+              role="alert"
+            >
+              {error}
+            </p>
+          )}
 
-      <Link to="/forgot-password">Esqueci minha senha</Link>
-      <Link to="/register">Não tem conta na Spendly? Cadastre-se</Link>
-    </div>
+          <button
+            type="submit"
+            className="app-button-primary w-full rounded-lg px-4 py-3 font-semibold shadow-sm focus:outline-none focus:ring-4 focus:ring-[var(--color-focus)]"
+          >
+            Entrar
+          </button>
+        </form>
+
+        <p className="mt-7 text-center text-sm text-[var(--color-muted)]">
+          Não tem conta na Spendly?{" "}
+          <Link
+            to="/register"
+            className="app-link font-semibold hover:underline"
+          >
+            Cadastre-se
+          </Link>
+        </p>
+      </section>
+    </main>
   );
 }
