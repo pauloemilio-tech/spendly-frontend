@@ -50,11 +50,21 @@ export function WalletForm({ onCreated }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 p-4 bg-white rounded shadow-sm">
+    <form
+      onSubmit={handleSubmit}
+      className="app-card space-y-5 rounded-2xl border p-5 sm:p-6"
+    >
       <div>
-        <label className="block text-sm font-medium text-gray-700">Nome</label>
+        <h2 className="text-lg font-semibold">Nova carteira</h2>
+        <p className="mt-1 text-sm text-[var(--color-muted)]">
+          Informe os dados para criar uma carteira.
+        </p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium">Nome</label>
         <input
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="app-input mt-2 w-full rounded-lg border px-3.5 py-3 outline-none"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -62,23 +72,23 @@ export function WalletForm({ onCreated }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Saldo inicial</label>
+        <label className="block text-sm font-medium">Saldo inicial</label>
         <input
           type="number"
           step="0.01"
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="app-input mt-2 w-full rounded-lg border px-3.5 py-3 outline-none"
           value={balance}
           onChange={(e) => setBalance(e.target.value)}
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Tipo</label>
+          <label className="block text-sm font-medium">Tipo</label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value as WalletType)}
-            className="mt-1 w-full border rounded px-3 py-2"
+            className="app-input mt-2 w-full rounded-lg border px-3.5 py-3 outline-none"
           >
             {Object.entries(WalletTypeObj).map(([, value]) => (
               <option key={value} value={value}>
@@ -89,11 +99,11 @@ export function WalletForm({ onCreated }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Status</label>
+          <label className="block text-sm font-medium">Status</label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as WalletStatus)}
-            className="mt-1 w-full border rounded px-3 py-2"
+            className="app-input mt-2 w-full rounded-lg border px-3.5 py-3 outline-none"
           >
             {Object.values(WalletStatusObj).map((s) => (
               <option key={s} value={s}>
@@ -104,12 +114,16 @@ export function WalletForm({ onCreated }: Props) {
         </div>
       </div>
 
-      {error && <div className="text-red-600">{error}</div>}
+      {error && (
+        <div className="app-error rounded-lg border px-4 py-3 text-sm" role="alert">
+          {error}
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+          className="app-button-primary rounded-lg px-4 py-2.5 font-semibold"
           disabled={loading}
         >
           {loading ? "Criando..." : "Criar wallet"}

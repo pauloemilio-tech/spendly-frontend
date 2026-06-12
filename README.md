@@ -578,6 +578,24 @@ cd spendly-frontend
 npm install
 ```
 
+## Configure environment variables
+
+Create a local `.env` file based on `.env.example`:
+
+```env
+VITE_API_URL=http://localhost:8080
+```
+
+For production deployments, configure `VITE_API_URL` in the hosting platform
+with the public URL of the backend, for example:
+
+```env
+VITE_API_URL=https://spendly-backend.example.com
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the complete frontend deployment and
+demo user checklist.
+
 ## Run development server
 
 ```bash
