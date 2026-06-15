@@ -160,7 +160,7 @@ export function LoginPage() {
             className="app-button-secondary w-full rounded-lg border px-4 py-3 font-semibold focus:outline-none focus:ring-4 focus:ring-[var(--color-focus)]"
           >
             {loadingMode === "demo"
-              ? "Acessando demo..."
+              ? "Acessando..."
               : "Entrar como visitante"}
           </button>
         </form>
