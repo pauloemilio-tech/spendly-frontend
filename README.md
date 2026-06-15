@@ -2,12 +2,42 @@
 
 Spendly is a modern personal finance management platform frontend built with a strong focus on scalability, clean architecture, user experience and real-world frontend engineering practices.
 
-The application simulates the frontend layer of a real financial product, including authentication flows, protected routes, wallet management, financial transactions, authenticated financial dashboard data and integration with a secure Spring Boot backend API.
+The application simulates the frontend layer of a real financial product, including authentication flows, protected routes, wallet management, financial transactions, authenticated financial dashboard data and integration with a Spring Boot backend API deployed on Oracle Cloud Infrastructure.
 
-> 🚧 **Project Status:** Active Development
-> This project is still evolving and is not production-ready yet.
+> 🚧 **Project Status:** Active Development / Live Demo Available
+> This project is still evolving, but it already has a functional deployed demo environment.
 
 ---
+
+# 🌐 Live Demo
+
+The Spendly frontend is deployed on Vercel and communicates with the backend through a Vercel API proxy.
+
+> 🔗 **Live Application:**
+> https://spendly-fawn.vercel.app
+
+## Demo Access
+
+The application includes a visitor access option for portfolio demonstration purposes.
+
+On the login screen, click:
+
+```txt
+Entrar como visitante
+```
+
+The demo user allows recruiters, reviewers and visitors to access the authenticated dashboard without manually creating an account.
+
+---
+
+# 🌎 Language Note
+
+This README is written in English to make the project more accessible to international recruiters, developers and technical reviewers.
+
+The application interface is currently in Portuguese because Spendly simulates a personal finance product designed for Brazilian users, including CPF-based authentication, localized financial categories and user-facing flows adapted to the Brazilian context.
+
+This separation reflects a common professional approach: technical documentation, code structure and repository communication in English, while the product interface follows the language of its target users.
+
 
 # 🎯 Project Goal
 
@@ -23,8 +53,11 @@ Spendly aims to simulate the frontend architecture of a real financial platform,
 * Clean separation of concerns
 * Authenticated dashboard experience
 * User-centered financial management flows
+* Real backend integration
+* Cloud-based deployment structure
 
 This repository contains the **frontend application** of Spendly.
+
 The backend API is maintained in a separate repository:
 
 > ⚙️ **Backend Repository:**
@@ -54,6 +87,13 @@ The backend API is maintained in a separate repository:
 * React Hooks
 * LocalStorage session persistence
 
+## Deployment
+
+* Vercel
+* Vercel rewrites/proxy
+* SPA fallback routing
+* Environment-based API configuration
+
 ---
 
 # 🧱 Current Stage
@@ -61,6 +101,7 @@ The backend API is maintained in a separate repository:
 The frontend currently includes:
 
 * Complete authentication flow
+* Visitor demo login
 * Public and protected route system
 * JWT session persistence
 * Automatic logout on invalid or expired session
@@ -76,6 +117,9 @@ The frontend currently includes:
 * Shared Light/Dark visual theme
 * Theme persistence with localStorage
 * Themed login, dashboard, wallet and transaction pages
+* Production deployment on Vercel
+* API proxy through `/api`
+* SPA fallback configuration for internal routes
 
 The application continues evolving toward a complete financial management platform integrated with the Spendly backend.
 
@@ -94,6 +138,7 @@ This transition allowed the project to:
 * Prepare the platform for dashboards and analytics
 * Maintain strong technical architecture while improving business direction
 * Connect frontend experience with real backend business rules
+* Demonstrate a more realistic full-stack deployment flow
 
 ---
 
@@ -105,6 +150,7 @@ This transition allowed the project to:
 
 * Login page
 * Register page
+* Visitor demo login
 * CPF and password validation
 * JWT authentication flow
 * Authentication persistence with localStorage
@@ -315,6 +361,66 @@ spendly-theme
 
 ---
 
+# Phase 6 — Deployment and Public Demo (Completed)
+
+The frontend is deployed on Vercel and integrated with the backend hosted on Oracle Cloud Infrastructure.
+
+## Deployment architecture
+
+```txt
+User
+↓
+Vercel Frontend
+↓
+/api proxy
+↓
+Spring Boot Backend on OCI VM
+↓
+Neon PostgreSQL Database
+```
+
+## Deployment features
+
+* Frontend deployed on Vercel
+* Backend deployed on Oracle Cloud Infrastructure
+* PostgreSQL database hosted on Neon
+* Vercel proxy configured through `/api`
+* SPA fallback configured for React Router routes
+* Environment-based API URL configuration
+* Visitor demo login working in deployed environment
+
+## Vercel proxy
+
+The frontend uses Vercel rewrites to avoid mixed content issues between the HTTPS frontend and the HTTP backend currently hosted on OCI.
+
+Production frontend calls:
+
+```txt
+/api/auth/login
+/api/customers/me
+/api/wallets
+/api/transactions
+/api/dashboard/summary
+```
+
+Vercel forwards those requests to the backend API:
+
+```txt
+http://163.176.202.5:8080
+```
+
+## SPA fallback
+
+The project also includes a fallback rewrite for React Router routes, preventing `404 NOT_FOUND` errors when refreshing internal pages such as:
+
+```txt
+/dashboard
+/wallets
+/transactions
+```
+
+---
+
 # 🔐 Authentication Architecture
 
 The authentication system was structured using React Context API and protected routing.
@@ -349,7 +455,21 @@ The authentication system was structured using React Context API and protected r
 
 # 🌐 API Integration
 
-The frontend communicates directly with the Spendly backend API.
+The frontend communicates with the Spendly backend API through Axios.
+
+In local development, the frontend can communicate directly with the local backend:
+
+```env
+VITE_API_URL=http://localhost:8080
+```
+
+In production, the frontend uses the Vercel proxy:
+
+```env
+VITE_API_URL=/api
+```
+
+This allows the deployed frontend to call relative API routes while Vercel forwards requests to the backend hosted on Oracle Cloud Infrastructure.
 
 ---
 
@@ -555,6 +675,9 @@ Authorization: Bearer <JWT_TOKEN>
 * CSS variables for design tokens
 * Responsive UI composition
 * Light/Dark mode support
+* Environment-based configuration
+* SPA deployment fallback
+* API proxy configuration
 
 ---
 
@@ -575,7 +698,7 @@ cd spendly-frontend
 ## Install dependencies
 
 ```bash
-npm install
+yarn install
 ```
 
 ## Configure environment variables
@@ -586,20 +709,18 @@ Create a local `.env` file based on `.env.example`:
 VITE_API_URL=http://localhost:8080
 ```
 
-For production deployments, configure `VITE_API_URL` in the hosting platform
-with the public URL of the backend, for example:
+For production deployments on Vercel, configure:
 
 ```env
-VITE_API_URL=https://spendly-backend.example.com
+VITE_API_URL=/api
 ```
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for the complete frontend deployment and
-demo user checklist.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the complete frontend deployment and demo user checklist.
 
 ## Run development server
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 The frontend usually runs at:
@@ -626,6 +747,14 @@ Expected backend local URL:
 http://localhost:8080
 ```
 
+Current deployed backend environment:
+
+```txt
+Oracle Cloud Infrastructure VM
+Neon PostgreSQL Database
+Spring Boot systemd service
+```
+
 ---
 
 # 🧪 Testing Status
@@ -634,11 +763,19 @@ The project currently builds successfully with TypeScript.
 
 Current validation:
 
-* `npm run build` passing
+* `yarn build` passing
 * Authentication manually validated
+* Visitor demo login manually validated
 * Dashboard integration manually validated
 * Wallet and transaction flows manually validated
 * Light/Dark theme manually validated
+* Vercel deployment manually validated
+* API proxy manually validated
+* SPA route refresh manually validated
+
+Known note:
+
+* `yarn lint` currently reports a preexisting React Fast Refresh warning in `AuthContext.tsx` related to `react-refresh/only-export-components`. This does not block the production build.
 
 Planned improvements:
 
@@ -649,6 +786,7 @@ Planned improvements:
 * Tests for dashboard rendering
 * Accessibility improvements
 * CI pipeline for build and tests
+* Lint cleanup for React Fast Refresh structure
 
 ---
 
@@ -666,6 +804,7 @@ Planned next steps include:
 * CI validation
 * Improved mobile experience
 * Possible future chart visualizations
+* Future backend HTTPS setup with domain, Nginx and SSL certificate
 
 ---
 
@@ -682,3 +821,4 @@ Frontend / Full-Stack Developer in progress
 
 * GitHub: [paulojrtoledo](https://github.com/paulojrtoledo)
 * LinkedIn: [Paulo Emilio](https://www.linkedin.com/)
+
