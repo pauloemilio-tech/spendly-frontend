@@ -4,11 +4,44 @@ import { isAxiosError } from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { ThemeToggle } from "../components/ThemeToggle";
 
+const DEMO_CREDENTIALS = {
+  cpf: "12345678901",
+  password: "123456",
+};
+
+type LoginMode = "manual" | "demo";
+
 export function LoginPage() {
   const { login } = useAuth();
   const [cpf, setCpf] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [loadingMode, setLoadingMode] = useState<LoginMode | null>(null);
+
+  async function authenticate(
+    credentials: { cpf: string; password: string },
+    mode: LoginMode
+  ) {
+    if (loadingMode !== null) {
+      return;
+    }
+
+    setError(null);
+    setLoadingMode(mode);
+
+    try {
+      // PublicRoute redirects to /dashboard after the auth context is updated.
+      await login(credentials.cpf, credentials.password);
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err.response?.data?.message || "Erro ao fazer login");
+      } else {
+        setError("Erro inesperado");
+      }
+    } finally {
+      setLoadingMode(null);
+    }
+  }
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,20 +56,14 @@ export function LoginPage() {
       return;
     }
 
-    setError(null);
-
-    try {
-      // Após login bem-sucedido, isAuthenticated torna-se true e o
-      // PublicRoute redireciona automaticamente para /dashboard.
-      await login(cpf, password);
-    } catch (err: unknown) {
-      if (isAxiosError(err)) {
-        setError(err.response?.data?.message || "Erro ao fazer login");
-      } else {
-        setError("Erro inesperado");
-      }
-    }
+    await authenticate({ cpf, password }, "manual");
   }
+
+  async function handleDemoLogin() {
+    await authenticate(DEMO_CREDENTIALS, "demo");
+  }
+
+  const isLoading = loadingMode !== null;
 
   return (
     <main className="app-page relative flex min-h-screen items-center justify-center px-4 py-20 sm:px-6">
@@ -112,9 +139,29 @@ export function LoginPage() {
 
           <button
             type="submit"
+            disabled={isLoading}
             className="app-button-primary w-full rounded-lg px-4 py-3 font-semibold shadow-sm focus:outline-none focus:ring-4 focus:ring-[var(--color-focus)]"
           >
-            Entrar
+            {loadingMode === "manual" ? "Entrando..." : "Entrar"}
+          </button>
+
+          <div className="flex items-center gap-3" aria-hidden="true">
+            <span className="h-px flex-1 bg-[var(--color-border)]" />
+            <span className="text-xs font-medium uppercase tracking-wider text-[var(--color-muted)]">
+              ou
+            </span>
+            <span className="h-px flex-1 bg-[var(--color-border)]" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            disabled={isLoading}
+            className="app-button-secondary w-full rounded-lg border px-4 py-3 font-semibold focus:outline-none focus:ring-4 focus:ring-[var(--color-focus)]"
+          >
+            {loadingMode === "demo"
+              ? "Acessando demo..."
+              : "Entrar como visitante"}
           </button>
         </form>
 
